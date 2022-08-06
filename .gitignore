@@ -2,6 +2,7 @@
 /dist
 /node_modules
 config.ts
+/data
 # Logs
 logs
 *.log

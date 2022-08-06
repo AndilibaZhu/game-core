@@ -1,7 +1,7 @@
 /*
  * @Author: Andy
  * @Date: 2022-07-26 21:53:51
- * @LastEditTime: 2022-07-29 21:10:11
+ * @LastEditTime: 2022-08-06 16:02:53
  */
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -13,7 +13,7 @@ import { nanoid } from 'nanoid';
 import { redis } from '../../db/redis';
 import dataMap from '../../db/dataMap';
 import { WsconnectGateway } from '../wsconnect/wsconnect.gateway';
-import { UserInfo } from 'src/interface/userInfo.interface';
+import { UserInfo } from '../../interface/userInfo.interface';
 const logger = new Logger('login.controller');
 @Injectable()
 export class LoginService {
@@ -53,13 +53,6 @@ export class LoginService {
       return {
         code: -1,
         msg: '账号被禁用',
-      };
-    }
-    //验证是否被删除
-    if (userDoc.isDeleted) {
-      return {
-        code: -1,
-        msg: '账号被删除',
       };
     }
     //验证WS是否在线

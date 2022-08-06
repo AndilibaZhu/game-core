@@ -1,18 +1,21 @@
 /*
  * @Author: Andy
  * @Date: 2022-07-24 16:04:06
- * @LastEditTime: 2022-07-29 14:33:19
+ * @LastEditTime: 2022-08-06 16:10:17
  */
 declare const module: any;
 
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { Log4jsLogger } from '@nestx-log4js/core';
+import { AppConfig } from 'config';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { WsExceptionFilter } from './common/filters/ws-exception.filter';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
+
 const logger = new Logger('main.ts');
+console.log = logger.log;
 const bootstrap = async () => {
   // 创建应用实例并配置跨域
   const app = await NestFactory.create(AppModule, { cors: true });
@@ -25,7 +28,7 @@ const bootstrap = async () => {
   app.use(new LoggerMiddleware().use);
   app.useLogger(app.get(Log4jsLogger));
 
-  await app.listen(process.env.SERVER_PORT);
+  await app.listen(AppConfig.port);
   if (module.hot) {
     module.hot.accept();
     module.hot.dispose(() => app.close());
@@ -33,5 +36,5 @@ const bootstrap = async () => {
 };
 
 bootstrap().then(() => {
-  logger.log('服务启动成功，端口:' + process.env.SERVER_PORT);
+  logger.log('服务启动成功，端口:' + AppConfig.port);
 });

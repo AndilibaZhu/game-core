@@ -1,7 +1,7 @@
 /*
  * @Author: Andy
  * @Date: 2022-07-29 13:09:40
- * @LastEditTime: 2022-07-29 13:12:12
+ * @LastEditTime: 2022-08-06 15:31:25
  */
 const webpack = require('webpack');
 const path = require('path');
@@ -27,7 +27,10 @@ module.exports = {
   },
   mode: 'development',
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
+    alias: {
+      '@': path.join(__dirname, 'src'), // 目录快捷方式配置
+    },
+    extensions: ['.js', '.ts', '.jsx', '.tsx', '.json'], //以上文件引入可以省略后缀名
   },
   plugins: [new webpack.HotModuleReplacementPlugin()],
   output: {
