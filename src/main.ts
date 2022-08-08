@@ -1,14 +1,14 @@
 /*
  * @Author: Andy
  * @Date: 2022-07-24 16:04:06
- * @LastEditTime: 2022-08-06 16:10:17
+ * @LastEditTime: 2022-08-07 14:59:52
  */
 declare const module: any;
 
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { Log4jsLogger } from '@nestx-log4js/core';
-import { AppConfig } from 'config';
+import { AppConfig } from '../config';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { WsExceptionFilter } from './common/filters/ws-exception.filter';

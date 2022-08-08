@@ -1,9 +1,9 @@
 /*
  * @Author: Andy
  * @Date: 2022-08-03 15:34:12
- * @LastEditTime: 2022-08-03 21:17:33
+ * @LastEditTime: 2022-08-07 17:35:29
  */
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
 export type AdminDocument = Admin & Document;
@@ -17,7 +17,6 @@ export class Admin extends Document {
   @Prop()
   readonly lastLogin: number;
 }
-export const AdminSchema = SchemaFactory.createForClass(Admin);
 export interface Token {
   token: string;
 }

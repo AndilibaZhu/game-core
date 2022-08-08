@@ -1,7 +1,7 @@
 /*
  * @Author: Andy
  * @Date: 2022-08-04 17:14:24
- * @LastEditTime: 2022-08-04 17:34:58
+ * @LastEditTime: 2022-08-08 14:33:53
  */
 import { Prop, Schema } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
@@ -30,15 +30,17 @@ export class City extends Document {
   @Prop()
   Buff: string[];
   @Prop()
-  prestigeName: string;
+  prestigeName: string; //声望名称
   @Prop()
-  prestigeRequire: 0;
+  prestigeRequire: 0; //声望要求
   @Prop()
-  resurrection: boolean;
+  resurrection: boolean; //是否可复活
   @Prop()
   mapUnits: MapUnits[];
   @Prop()
-  carpet: string[];
+  tiledMap: string;
+  @Prop()
+  tags: string[];
 }
 export interface MapUnits {
   t: number; //1.传送门 2.商贩 3.任务 4.技能学习 5.专业学习 6.npc 7.野怪 8.Boss 9.玩家

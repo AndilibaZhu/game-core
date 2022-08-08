@@ -1,13 +1,12 @@
 /*
  * @Author: Andy
  * @Date: 2022-04-18 13:21:52
- * @LastEditTime: 2022-08-03 15:56:30
+ * @LastEditTime: 2022-08-08 12:21:53
  */
 import { Module, Global } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AdminSchema } from '../interface/adminInterface/admin.interface';
 import { AppConfig } from '../../config';
-import { UserSchema, UserInfoSchema, GoodsDataSchema, EquipsDataSchema } from './schemas';
+import { AdminSchema, UserSchema, UserInfoSchema, GoodsDataSchema, EquipsDataSchema, CitySchema } from './schemas';
 
 //整合所有的schema，并且把它们注册到mongoose中
 const MONGO_MODELS = MongooseModule.forFeature([
@@ -35,6 +34,11 @@ const MONGO_MODELS = MongooseModule.forFeature([
     name: 'EQUIPSDATA_MODEL',
     schema: EquipsDataSchema,
     collection: 'equipsdatas',
+  },
+  {
+    name: 'CITY_MODEL',
+    schema: CitySchema,
+    collection: 'cities',
   },
 ]);
 @Global()

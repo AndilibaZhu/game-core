@@ -1,7 +1,7 @@
 /*
  * @Author: Andy
  * @Date: 2022-07-24 16:04:06
- * @LastEditTime: 2022-08-03 22:40:20
+ * @LastEditTime: 2022-08-07 17:25:22
  */
 import { Module } from '@nestjs/common';
 import { DbModule } from './db/db.module';
@@ -13,6 +13,8 @@ import { WstestModule } from './modules/wstest/wstest.module';
 import { AdminLoginModule } from './modules/admin/admin-login/admin-login.module';
 import { AdminGoodsModule } from './modules/admin/admin-goods/admin-goods.module';
 import { AdminEquipsModule } from './modules/admin/admin-equips/admin-equips.module';
+import { AdminCitiesModule } from './modules/admin/admin-cities/admin-cities.module';
+import { AdminNpcsModule } from './modules/admin/admin-npcs/admin-npcs.module';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { AdminEquipsModule } from './modules/admin/admin-equips/admin-equips.mod
     AdminLoginModule,
     AdminGoodsModule,
     AdminEquipsModule,
+    AdminCitiesModule,
+    AdminNpcsModule,
   ],
   controllers: [],
   providers: [],
