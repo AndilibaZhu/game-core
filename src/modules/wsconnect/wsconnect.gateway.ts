@@ -1,16 +1,9 @@
 /*
  * @Author: Andy
  * @Date: 2022-07-24 22:12:41
- * @LastEditTime: 2022-07-30 16:30:41
+ * @LastEditTime: 2022-08-11 21:15:52
  */
-import {
-  WebSocketGateway,
-  SubscribeMessage,
-  MessageBody,
-  ConnectedSocket,
-  WebSocketServer,
-  OnGatewayInit,
-} from '@nestjs/websockets';
+import { WebSocketGateway, SubscribeMessage, MessageBody, ConnectedSocket, WebSocketServer, OnGatewayInit } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { WsconnectService } from './wsconnect.service';
 import { Logger } from '@nestjs/common';
@@ -36,7 +29,7 @@ export class WsconnectGateway implements OnGatewayInit {
   @SubscribeMessage('connection')
   handleConnection(@ConnectedSocket() client: Socket) {
     logger.debug('连接成功-' + client['username']);
-    this.server.allSockets().then((res) => logger.log(res.has(client.id)));
+    //this.server.allSockets().then((res) => logger.log(res.has(client.id)));
   }
   @SubscribeMessage('disconnect')
   handleDisconnect(@ConnectedSocket() client: Socket) {

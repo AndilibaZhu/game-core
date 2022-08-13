@@ -12,8 +12,8 @@ const logger = new Logger('adminEquips.controller');
 export class AdminEquipsController {
   constructor(public readonly adminEquipsService: AdminEquipsService) {}
   //获取所有装备
-  @Get('getAllEquips')
-  async getAllEquips() {
+  @Post('getAllEquips')
+  async getAllEquips(@Body() id: ID) {
     try {
       const res = await this.adminEquipsService.getAllEquips();
       return res;

@@ -1,7 +1,7 @@
 /*
  * @Author: Andy
  * @Date: 2022-04-18 14:55:49
- * @LastEditTime: 2022-07-25 16:58:14
+ * @LastEditTime: 2022-08-09 11:12:59
  */
 module.exports = {
   parser: '@typescript-eslint/parser',
@@ -19,6 +19,7 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
+    'max-len': ['error', 220], // 强制一行的最大长度
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',

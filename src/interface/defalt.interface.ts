@@ -1,7 +1,7 @@
 /*
  * @Author: Andy
  * @Date: 2022-07-26 22:51:05
- * @LastEditTime: 2022-08-04 15:35:44
+ * @LastEditTime: 2022-08-11 16:53:38
  */
 export interface RequestReturn<T> {
   code: number;
@@ -10,4 +10,10 @@ export interface RequestReturn<T> {
 }
 export interface ID {
   id: string;
+}
+export interface PageReturn<T> {
+  pageNo: number;
+  pageSize: number;
+  total: number;
+  records: T;
 }

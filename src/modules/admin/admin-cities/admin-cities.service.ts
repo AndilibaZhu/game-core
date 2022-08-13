@@ -1,23 +1,35 @@
 /*
  * @Author: Andy
  * @Date: 2022-08-06 16:36:40
- * @LastEditTime: 2022-08-07 17:07:30
+ * @LastEditTime: 2022-08-12 23:09:33
  */
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { City } from 'src/interface/city.interface';
+import { City, SearchOption } from 'src/interface/city.interface';
 import { ID } from '../../../interface/defalt.interface';
 @Injectable()
 export class AdminCitiesService {
   constructor(@InjectModel('CITY_MODEL') private readonly citiesModel: Model<City>) {}
   //获取所有城市
-  async getAllCities() {
-    const cities = await this.citiesModel.find();
+  async getAllCities(options: SearchOption) {
+    const { pageInfo, searchData } = options;
+
+    const { pageNo, pageLimit } = pageInfo;
+    const total = await this.citiesModel.countDocuments(searchData);
+    const cities = await this.citiesModel
+      .find(searchData)
+      .skip((pageNo - 1) * pageLimit)
+      .limit(pageLimit);
     return {
       code: 200,
-      msg: '获取成功',
-      data: cities,
+      msg: '获取城市成功',
+      data: {
+        pageNo: pageNo,
+        pageSize: Math.ceil(total / pageLimit),
+        total: total,
+        records: cities,
+      },
     };
   }
   //删除指定城市

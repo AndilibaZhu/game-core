@@ -1,13 +1,12 @@
 /*
  * @Author: Andy
  * @Date: 2022-08-03 15:23:18
- * @LastEditTime: 2022-08-08 13:27:01
+ * @LastEditTime: 2022-08-11 17:58:53
  */
 import { Body, Controller, Logger, Post, Get, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ID } from 'src/interface/defalt.interface';
 import { qqMsg } from '../../../game/qqMsg';
-import { LoginForm } from 'src/interface/user.interface';
+import { LoginForm, SearchOption } from '../../../interface/user.interface';
 import { AdminLoginService } from './admin-login.service';
 import { segment } from 'oicq';
 const logger = new Logger('adminlogin.controller');
@@ -27,6 +26,7 @@ export class AdminLoginController {
   @Post('checkLogin')
   async checkLogin(@Body() user: LoginForm) {
     try {
+      await this.adminLoginService.addUser(user);
       const res = await this.adminLoginService.checkLogin(user);
       return res;
     } catch (error) {
@@ -34,11 +34,11 @@ export class AdminLoginController {
     }
   }
   //获取所有用户
-  @Get('getAllUsers')
+  @Post('getAllUsers')
   @UseGuards(AuthGuard('jwt'))
-  async getAllUser() {
+  async getAllUser(@Body() searchOption: SearchOption) {
     try {
-      const res = await this.adminLoginService.getAllUser();
+      const res = await this.adminLoginService.getAllUser(searchOption);
       return res;
     } catch (error) {
       logger.error(error);
@@ -47,9 +47,9 @@ export class AdminLoginController {
   //删除指定用户
   @Post('deleteUser')
   @UseGuards(AuthGuard('jwt'))
-  async deleteUser(@Body() id: ID) {
+  async deleteUser(@Body() params: { id: string; isDeleted: boolean }) {
     try {
-      const res = await this.adminLoginService.deleteUser(id);
+      const res = await this.adminLoginService.deleteUser(params);
       return res;
     } catch (error) {
       logger.error(error);
@@ -61,6 +61,16 @@ export class AdminLoginController {
   async addUser(@Body() user: LoginForm) {
     try {
       const res = await this.adminLoginService.addUser(user);
+      return res;
+    } catch (error) {
+      logger.error(error);
+    }
+  }
+  @Post('banUser')
+  @UseGuards(AuthGuard('jwt'))
+  async banUser(@Body() params: { id: string; isBaned: boolean }) {
+    try {
+      const res = await this.adminLoginService.banUser(params);
       return res;
     } catch (error) {
       logger.error(error);

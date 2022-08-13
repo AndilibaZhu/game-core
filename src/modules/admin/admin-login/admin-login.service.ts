@@ -1,18 +1,18 @@
 /*
  * @Author: Andy
  * @Date: 2022-08-03 15:23:19
- * @LastEditTime: 2022-08-03 21:34:51
+ * @LastEditTime: 2022-08-11 21:10:48
  */
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Admin, Token } from '../../../interface/adminInterface/admin.interface';
-import { ID, RequestReturn } from '../../../interface/defalt.interface';
-import { LoginForm, User } from '../../../interface/user.interface';
+import { PageReturn, RequestReturn } from '../../../interface/defalt.interface';
+import { LoginForm, SearchOption, User } from '../../../interface/user.interface';
 import { UserInfo } from '../../../interface/userInfo.interface';
 import { addSalt, encript } from '../../../utils/Encription';
-
+//const logger = new Logger('adminlogin.server');
 @Injectable()
 export class AdminLoginService {
   constructor(
@@ -24,19 +24,19 @@ export class AdminLoginService {
 
   async checkLogin(user: LoginForm): Promise<RequestReturn<Token>> {
     const admin = await this.adminUserModel.findOne({ adminname: user.username });
-    console.log(user);
     if (!admin) {
       return {
         code: -1,
         msg: '用户名不存在',
       };
     }
-    if (admin.password !== user.password) {
+    if (admin.password !== encript(user.password, admin.salt)) {
       return {
         code: -2,
         msg: '密码错误',
       };
     }
+    //更新登录时间
     const access = this.jwtService.sign(user);
     console.log(access);
     return {
@@ -48,20 +48,31 @@ export class AdminLoginService {
     };
   }
   //获取所有用户
-  async getAllUser(): Promise<RequestReturn<User[]>> {
-    const users = await this.userModel.find();
+  async getAllUser(searchOption: SearchOption): Promise<RequestReturn<PageReturn<User[]>>> {
+    const { pageInfo, searchData } = searchOption;
+    const { pageNo, pageLimit } = pageInfo;
+    const total = await this.userModel.countDocuments(searchData);
+    const users = await this.userModel
+      .find(searchData)
+      .skip((pageNo - 1) * pageLimit)
+      .limit(pageLimit);
     return {
       code: 200,
       msg: '获取成功',
-      data: users,
+      data: {
+        pageNo: pageNo,
+        pageSize: Math.ceil(total / pageLimit),
+        total: total,
+        records: users,
+      },
     };
   }
   //删除指定用户
-  async deleteUser(id: ID): Promise<RequestReturn<undefined>> {
+  async deleteUser(params: { id: string; isDeleted: boolean }): Promise<RequestReturn<undefined>> {
     const user = await this.userModel.findByIdAndUpdate(
-      id.id,
+      params.id,
       {
-        isDelete: true,
+        isDeleted: params.isDeleted,
       },
       { new: true },
     );
@@ -72,8 +83,8 @@ export class AdminLoginService {
       };
     } else {
       return {
-        code: -1,
-        msg: '删除失败',
+        code: 200,
+        msg: '恢复成功',
       };
     }
   }
@@ -91,6 +102,7 @@ export class AdminLoginService {
         salt: newsalt,
         userDataID: userInfo._id,
       });
+      // await this.adminUserModel.create({        adminname: user.username,        password: encript(user.password, newsalt),        salt: newsalt,      });
       return {
         code: 200,
         msg: '添加成功',
@@ -100,5 +112,26 @@ export class AdminLoginService {
       code: -1,
       msg: '用户名已存在',
     };
+  }
+  //封号
+  async banUser(params: { id: string; isBaned: boolean }): Promise<RequestReturn<undefined>> {
+    const user = await this.userModel.findByIdAndUpdate(
+      params.id,
+      {
+        isBaned: params.isBaned,
+      },
+      { new: true },
+    );
+    if (user.isBaned) {
+      return {
+        code: 200,
+        msg: '封号成功',
+      };
+    } else {
+      return {
+        code: 200,
+        msg: '解封成功',
+      };
+    }
   }
 }

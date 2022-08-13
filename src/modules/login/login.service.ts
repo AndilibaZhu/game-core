@@ -1,7 +1,7 @@
 /*
  * @Author: Andy
  * @Date: 2022-07-26 21:53:51
- * @LastEditTime: 2022-08-06 16:02:53
+ * @LastEditTime: 2022-08-12 22:34:24
  */
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -17,11 +17,7 @@ import { UserInfo } from '../../interface/userInfo.interface';
 const logger = new Logger('login.controller');
 @Injectable()
 export class LoginService {
-  constructor(
-    @InjectModel('USER_MODEL') private readonly userModel: Model<User>,
-    @InjectModel('USERINFO_MODEL') private readonly userInfoModel: Model<UserInfo>,
-    private readonly ws: WsconnectGateway,
-  ) {}
+  constructor(@InjectModel('USER_MODEL') private readonly userModel: Model<User>, @InjectModel('USERINFO_MODEL') private readonly userInfoModel: Model<UserInfo>, private readonly ws: WsconnectGateway) {}
 
   //登录
   async login(user: LoginForm): Promise<RequestReturn<LoginSuccess>> {
@@ -52,33 +48,28 @@ export class LoginService {
     if (userDoc.isBaned) {
       return {
         code: -1,
-        msg: '账号被禁用',
+        msg: '账号被封禁',
       };
     }
-    //验证WS是否在线
-    if (
-      dataMap.wsSidMap.has(user.username) &&
-      (await this.ws.server.allSockets()).has(dataMap.wsSidMap.get(user.username))
-    ) {
-      logger.log(
-        '账号在线-' +
-          user.username +
-          '-' +
-          (await this.ws.server.allSockets()).has(dataMap.wsSidMap.get(user.username)),
-      );
-      this.kickout(user);
-      return {
-        code: -1,
-        msg: '账号在其他地方登录!已踢出,请重新登陆！',
-      };
-    }
+
     //验证密码
     if (encript(user.password, userDoc.salt) === userDoc.password) {
+      //验证WS是否在线
+      if (dataMap.wsSidMap.has(user.username) && (await this.ws.server.allSockets()).has(dataMap.wsSidMap.get(user.username))) {
+        logger.log('账号在线-' + user.username + '-' + (await this.ws.server.allSockets()).has(dataMap.wsSidMap.get(user.username)));
+        this.kickout(user);
+        return {
+          code: -1,
+          msg: '账号在其他地方登录!已踢出,请重新登陆！',
+        };
+      }
       const token = nanoid();
       //redis存储token并设置10秒过期
 
       if ((await redis.get(user.username)) === null) {
         redis.setex(user.username, 10, token);
+        //数据库更新登录时间
+        await this.userModel.updateOne({ username: user.username }, { lastLogin: new Date().valueOf() });
         return {
           code: 200,
           msg: '登录成功',
@@ -92,6 +83,11 @@ export class LoginService {
           msg: '重复登录，请稍后再试。' + ((await redis.ttl(user.username)) + '秒后可再次登录'),
         };
       }
+    } else {
+      return {
+        code: -1,
+        msg: '密码错误',
+      };
     }
   }
   //踢出在线玩家

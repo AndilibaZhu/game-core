@@ -1,13 +1,12 @@
 /*
  * @Author: Andy
  * @Date: 2022-07-28 13:48:38
- * @LastEditTime: 2022-08-04 21:59:38
+ * @LastEditTime: 2022-08-08 21:24:57
  */
 import { Prop, Schema } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { BackPack } from './goodsInfo.interface';
 import { Pos } from './travel.interface';
-//import { Pos } from './travel.interface';
 export class PlayerInfo {
   str: number; //力量
   dex: number; //敏捷
@@ -75,4 +74,29 @@ export class UserInfo extends Document {
   backMax: number; //背包总容量
   @Prop({ default: [] })
   backPack: BackPack[]; //背包内物品
+  @Prop({ default: [] })
+  friendList: FriendList[]; //好友列表
+  @Prop({ default: [] })
+  prestigeList: PrestigeList[]; //声望列表
+  @Prop({ default: [] })
+  mailList: MailList[]; //邮件列表
+}
+
+interface PrestigeList {
+  name: string;
+  level: number;
+  exp: number;
+  maxExp: number;
+}
+interface MailList {
+  title: string;
+  content: string;
+  time: number;
+  goods: BackPack[];
+  coins: number;
+  exp: number;
+}
+interface FriendList {
+  name: string;
+  id: string;
 }

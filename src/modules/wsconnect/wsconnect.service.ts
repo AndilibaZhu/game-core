@@ -1,7 +1,7 @@
 /*
  * @Author: Andy
  * @Date: 2022-07-24 22:12:41
- * @LastEditTime: 2022-07-29 13:22:35
+ * @LastEditTime: 2022-08-11 21:40:19
  */
 import { Injectable } from '@nestjs/common';
 import { redis } from '../../db/redis';
@@ -18,6 +18,9 @@ export class WsconnectService {
   async handShakeCheck(socket: Socket): Promise<boolean> {
     const token = socket.handshake.auth.token;
     const username = socket.handshake.auth.username;
+    //记录IP地址到数据库
+    const ip = socket.handshake.address;
+    await this.userModel.findOneAndUpdate({ username: username }, { IPAddress: ip });
     logger.log('初始化-' + username);
     dataMap.wsSidMap.set(username, socket.id);
     socket['username'] = username;

@@ -1,7 +1,7 @@
 /*
  * @Author: Andy
  * @Date: 2022-07-24 16:04:06
- * @LastEditTime: 2022-08-07 14:59:52
+ * @LastEditTime: 2022-08-08 21:45:30
  */
 declare const module: any;
 
@@ -15,7 +15,6 @@ import { WsExceptionFilter } from './common/filters/ws-exception.filter';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 
 const logger = new Logger('main.ts');
-console.log = logger.log;
 const bootstrap = async () => {
   // 创建应用实例并配置跨域
   const app = await NestFactory.create(AppModule, { cors: true });

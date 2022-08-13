@@ -1,12 +1,12 @@
 /*
  * @Author: Andy
  * @Date: 2022-08-06 16:36:39
- * @LastEditTime: 2022-08-07 17:18:50
+ * @LastEditTime: 2022-08-12 22:36:33
  */
 
-import { Body, Controller, Get, Logger, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Logger, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { City } from '../../../interface/city.interface';
+import { City, SearchOption } from '../../../interface/city.interface';
 import { ID } from '../../../interface/defalt.interface';
 import { AdminCitiesService } from './admin-cities.service';
 const logger = new Logger('adminCities.controller');
@@ -17,10 +17,10 @@ export class AdminCitiesController {
   constructor(public readonly adminCitiesService: AdminCitiesService) {}
   //获取所有城市
 
-  @Get('getAllCities')
-  async getAllCities() {
+  @Post('getAllCities')
+  async getAllCities(@Body() options: SearchOption) {
     try {
-      const res = await this.adminCitiesService.getAllCities();
+      const res = await this.adminCitiesService.getAllCities(options);
       return res;
     } catch (error) {
       logger.error(error);
