@@ -1,7 +1,7 @@
 /*
  * @Author: Andy
  * @Date: 2022-08-06 16:36:40
- * @LastEditTime: 2022-08-12 23:09:33
+ * @LastEditTime: 2022-08-13 15:31:58
  */
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -57,6 +57,23 @@ export class AdminCitiesService {
       code: 200,
       msg: '修改成功',
       data: res,
+    };
+  }
+  //获取所有城市的简介
+  async getAllCitiesSimple() {
+    const cities = await this.citiesModel.find({}, { dec: 1, cityName: 1, isCity: 1, isCapital: 1, raid: 1, level: 1, tags: 1, isRaid: 1 });
+    return {
+      code: 200,
+      msg: '获取成功',
+      data: cities,
+    };
+  }
+  async getOneCity(id: ID) {
+    const city = await this.citiesModel.findById(id.id);
+    return {
+      code: 200,
+      msg: '获取成功',
+      data: city,
     };
   }
 }
