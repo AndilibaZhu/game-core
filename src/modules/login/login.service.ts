@@ -1,7 +1,7 @@
 /*
  * @Author: Andy
  * @Date: 2022-07-26 21:53:51
- * @LastEditTime: 2022-08-12 22:34:24
+ * @LastEditTime: 2022-09-03 14:18:38
  */
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -105,11 +105,10 @@ export class LoginService {
   //初始化玩家数据
   async initUser(uname: string): Promise<string> {
     //初始化玩家数据
-    console.log(uname);
+
     const userInfo = await this.userInfoModel.create({
       username: uname,
     });
-    console.log(userInfo);
     return userInfo._id;
   }
 }

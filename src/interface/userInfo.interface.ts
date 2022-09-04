@@ -1,12 +1,33 @@
 /*
  * @Author: Andy
  * @Date: 2022-07-28 13:48:38
- * @LastEditTime: 2022-08-08 21:24:57
+ * @LastEditTime: 2022-09-03 21:16:53
  */
 import { Prop, Schema } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { BackPack } from './goodsInfo.interface';
 import { Pos } from './travel.interface';
+class BasicInfo {
+  hp: number; //生命值
+  mp: number; //魔法值
+  lv: number; //等级
+  exp: number; //经验
+  gold: number; //金币
+  diamond: number; //钻石
+  hpStore: number; //生命值储备
+  mpStore: number; //魔法值储备
+  constructor() {
+    this.hp = 0;
+    this.mp = 0;
+    this.lv = 1;
+    this.exp = 0;
+    this.gold = 100;
+    this.diamond = 20;
+    this.hpStore = 10000;
+    this.mpStore = 10000;
+  }
+}
+
 export class PlayerInfo {
   str: number; //力量
   dex: number; //敏捷
@@ -22,6 +43,7 @@ export class PlayerInfo {
   pentrate: number; //穿透
   atkspeed: number; //出手速度
   playerPersonal: number[]; //玩家个人增加的属性 1.str 2.dex 3.int 4.vit 5.hp 6.mp
+  freeAbP: number; //自由能力点
   constructor() {
     this.str = 5;
     this.dex = 5;
@@ -37,6 +59,7 @@ export class PlayerInfo {
     this.pentrate = 0;
     this.atkspeed = 0;
     this.playerPersonal = [0, 0, 0, 0, 0, 0]; //玩家个人增加的属性 1.str 2.dex 3.int 4.vit 5.hp 6.mp
+    this.freeAbP = 5;
   }
 }
 export type UserInfoDocument = UserInfo & Document;
@@ -46,30 +69,18 @@ export class UserInfo extends Document {
   username: string;
   @Prop({ default: new PlayerInfo() })
   playerInfo: PlayerInfo;
+  @Prop({ default: new BasicInfo() })
+  basicInfo: BasicInfo;
   @Prop({ default: 0 })
   job: number; //1.战士 2.弓箭手 3.法师
-  @Prop({ default: 5 })
-  freeAbP: number; //自由能力点
-  @Prop({ default: 10000 })
-  hpStore: number; //生命值储备
-  @Prop({ default: 10000 })
-  mpStore: number; //魔法值储备
   @Prop({ default: [] })
   playerEquip: BackPack[]; //default: [null null null null null null null null null null null null null null] //玩家装备
   @Prop({ default: [] })
   backPackBag: BackPack[]; //default: [null null null null] //背包格子的背包
-  @Prop({ default: { x: 0, y: 0, mapid: 'map1' } })
+  @Prop({ default: { x: 5, y: 5, mapid: '62fe4e9248e770aa4ba7031a' } })
   pos: Pos; //default: {x: 0, y: 0, mapid: 'map1'} //玩家当前位置
-  @Prop({ default: 1 })
-  level: number; //default: 1 //玩家等级
-  @Prop({ default: 1 })
-  exp: number; //default: 0 //玩家经验
   //@Prop({ default: null })
   //group: { type: Object };
-  @Prop({ default: 100 })
-  gold: number; //金币
-  @Prop({ default: 100 })
-  diamond: number; //钻石
   @Prop({ default: 20 })
   backMax: number; //背包总容量
   @Prop({ default: [] })
@@ -89,6 +100,7 @@ interface PrestigeList {
   maxExp: number;
 }
 interface MailList {
+  isRead: boolean;
   title: string;
   content: string;
   time: number;

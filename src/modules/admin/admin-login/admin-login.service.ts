@@ -1,7 +1,7 @@
 /*
  * @Author: Andy
  * @Date: 2022-08-03 15:23:19
- * @LastEditTime: 2022-08-11 21:10:48
+ * @LastEditTime: 2022-09-03 14:19:06
  */
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -38,7 +38,7 @@ export class AdminLoginService {
     }
     //更新登录时间
     const access = this.jwtService.sign(user);
-    console.log(access);
+    //console.log(access);
     return {
       code: 200,
       msg: '登录成功',

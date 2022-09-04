@@ -1,10 +1,10 @@
 /*
  * @Author: Andy
  * @Date: 2022-07-26 21:53:41
- * @LastEditTime: 2022-07-29 11:49:30
+ * @LastEditTime: 2022-08-23 22:46:33
  */
 import { Controller, Logger, Post, Body } from '@nestjs/common';
-import { LoginForm } from 'src/interface/user.interface';
+import { LoginForm } from '../../interface/user.interface';
 import { LoginService } from './login.service';
 const logger = new Logger('login.controller');
 @Controller('user')
