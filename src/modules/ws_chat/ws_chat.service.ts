@@ -1,7 +1,7 @@
 /*
  * @Author: Andy
  * @Date: 2022-08-20 20:02:06
- * @LastEditTime: 2022-09-03 14:19:18
+ * @LastEditTime: 2022-09-04 12:34:35
  */
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -9,6 +9,7 @@ import { Model } from 'mongoose';
 import { Chat, ChatMessage } from '../../interface/chat.interface';
 import { WsconnectGateway } from '../wsconnect/wsconnect.gateway';
 import { redis } from '../../db/redis';
+import { qqMsg } from '../../game/qqMsg';
 @Injectable()
 export class WsChatService {
   constructor(@InjectModel('CHAT_MODEL') private readonly chatModel: Model<Chat>, private readonly ws: WsconnectGateway) {}
@@ -37,5 +38,8 @@ export class WsChatService {
       default:
         break;
     }
+  }
+  async sendqq(chatMessage: string) {
+    await qqMsg.pickGroup(739708567).sendMsg('测试消息，TESTAPI发送' + chatMessage);
   }
 }

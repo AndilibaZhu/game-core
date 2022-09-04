@@ -1,7 +1,7 @@
 /*
  * @Author: Andy
  * @Date: 2022-08-20 20:02:06
- * @LastEditTime: 2022-08-23 22:49:14
+ * @LastEditTime: 2022-09-04 12:35:35
  */
 import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer, ConnectedSocket } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
@@ -22,5 +22,9 @@ export class WsChatGateway {
   sendmsg(@MessageBody() chatMessage: ChatMessage, @ConnectedSocket() client: Socket) {
     chatMessage.fr = client['username'];
     return this.wsChatService.sendmsg(chatMessage);
+  }
+  @SubscribeMessage('sendqq')
+  sendqq(@MessageBody() chatMessage: string) {
+    return this.wsChatService.sendqq(chatMessage);
   }
 }
