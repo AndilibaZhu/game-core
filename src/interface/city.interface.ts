@@ -1,7 +1,7 @@
 /*
  * @Author: Andy
  * @Date: 2022-08-04 17:14:24
- * @LastEditTime: 2022-08-18 22:31:09
+ * @LastEditTime: 2022-09-22 22:32:16
  */
 import { Prop, Schema } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
@@ -30,7 +30,7 @@ export class City extends Document {
   @Prop({ default: '' })
   dec: string; // 描述
   @Prop({ default: [] })
-  monsters: string[]; // 怪物列表
+  monsters: { id: string; count: number }[]; // 怪物列表(id,地图内怪物数量)
   @Prop({ default: [] })
   NPCS: string[]; // NPC列表
   @Prop({ default: [] })
@@ -63,4 +63,24 @@ export interface SearchOption {
     isCity?: string;
     isCapital?: boolean;
   };
+}
+export class CitySimple {
+  n: string; // 城市名字
+  lv: number; // 等级要求
+  dec: string; // 描述
+  Buff: string[]; // Buff列表
+  resurrection: boolean; //是否可复活
+  mapT: string; // 瓦片地图名称
+  size: number; // 地图大小
+  mBG: string; // 地图背景
+  constructor(city: City) {
+    this.n = city.cityName;
+    this.lv = city.level;
+    this.dec = city.dec;
+    this.Buff = city.Buff;
+    this.resurrection = city.resurrection;
+    this.mapT = city.tiledMap;
+    this.size = city.mapSize;
+    this.mBG = city.mapBackground;
+  }
 }

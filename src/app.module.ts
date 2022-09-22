@@ -1,7 +1,7 @@
 /*
  * @Author: Andy
  * @Date: 2022-07-24 16:04:06
- * @LastEditTime: 2022-08-24 22:25:50
+ * @LastEditTime: 2022-09-07 14:44:30
  */
 import { Module } from '@nestjs/common';
 import { DbModule } from './db/db.module';
@@ -18,6 +18,7 @@ import { WsChatModule } from './modules/ws_chat/ws_chat.module';
 import { WsTravelModule } from './modules/ws_travel/ws_travel.module';
 import { TasksModule } from './modules/tasks/tasks.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { AdminMonstersModule } from './modules/admin/admin-monsters/admin-monsters.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     WsTravelModule,
     TasksModule,
     ScheduleModule.forRoot(),
+    AdminMonstersModule,
   ],
   controllers: [],
   providers: [],

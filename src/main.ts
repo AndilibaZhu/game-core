@@ -1,7 +1,7 @@
 /*
  * @Author: Andy
  * @Date: 2022-07-24 16:04:06
- * @LastEditTime: 2022-08-08 21:45:30
+ * @LastEditTime: 2022-09-21 17:08:52
  */
 declare const module: any;
 
@@ -13,7 +13,6 @@ import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { WsExceptionFilter } from './common/filters/ws-exception.filter';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
-
 const logger = new Logger('main.ts');
 const bootstrap = async () => {
   // 创建应用实例并配置跨域

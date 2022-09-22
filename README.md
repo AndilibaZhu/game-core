@@ -1,7 +1,7 @@
 <!--
  * @Author: Andy
  * @Date: 2022-07-26 21:52:56
- * @LastEditTime: 2022-08-07 17:25:12
+ * @LastEditTime: 2022-09-07 14:44:28
 -->
 ## 用nest.js做后端的一个小游戏
 ### 技术栈：
@@ -56,7 +56,7 @@ nest g interceptor interceptor/transform	创建拦截器
 nest g filter filter/http-exception	创建异常过滤器
 nest g middleware middleware/logge	创建中间件
 
-nest g co admin-npcs
-nest g service admin-npcs
-nest g mo admin-npcs
+nest g co admin-monsters
+nest g service admin-monsters
+nest g mo admin-monsters
 ```

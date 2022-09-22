@@ -1,10 +1,11 @@
 /*
  * @Author: Andy
  * @Date: 2022-08-23 23:13:09
- * @LastEditTime: 2022-09-01 22:26:43
+ * @LastEditTime: 2022-09-22 22:33:03
  */
 import { Injectable } from '@nestjs/common';
 import { Socket } from 'socket.io';
+import { CitySimple } from 'src/interface/city.interface';
 import DATA from '../../db/dataMap';
 
 @Injectable()
@@ -13,9 +14,12 @@ export class WsTravelService {
     const userinfo = DATA.USERINFODATA.get(client['username']);
     const pos = userinfo.pos;
     const cityInfo = DATA.CITIESDATA.get(pos.mapid);
+    const mapUnits = [...DATA.MAPUNITDATA[pos.mapid].values()];
+
     return {
+      mapUnits: mapUnits,
       pos: pos,
-      cityInfo: cityInfo,
+      cityInfo: new CitySimple(cityInfo),
     };
   }
   async playerWalk(client: Socket, data: string) {
